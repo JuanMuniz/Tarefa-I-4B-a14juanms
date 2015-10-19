@@ -16,50 +16,144 @@ package com.example.a14juanms.tarefa_i_4b_a14juanms;
         Botón para engadir elementos á lista*/
 
 
-import android.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class tarefa_1_4_B_a14juanms extends FragmentActivity {
 
-    ArrayList<String>valores=new ArrayList<>();
-    dialogo dialogoF=new dialogo();
+    static final int numeroDialogo=1;
+    ArrayList<String> valores = new ArrayList<>();
+    ArrayList<Boolean> chekeados = new ArrayList<>();
+    dialogo dialogoF = new dialogo();
     Button btnShow;
     Button btnDia;
+    TextView verMamiferos;
+    EditText engadeMamiferos;
+    Button engadir;
+    AlertDialog.Builder venta;
+    boolean chekeadositems[];
+    String matriz[];
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarefa_1_4__b_a14juanms);
-        btnShow= (Button)findViewById(R.id.botonShow);
-        btnDia= (Button)findViewById(R.id.botonDia);
+        btnShow = (Button) findViewById(R.id.botonShow);
+        btnDia = (Button) findViewById(R.id.botonDia);
+        verMamiferos = (TextView) findViewById(R.id.itemSelected);
+        engadeMamiferos = (EditText) findViewById(R.id.engadeMamifero);
+        engadir = (Button) findViewById(R.id.btnEngadir);
+
         valores.add("Perro");
+        chekeados.add(false);
         valores.add("Gato");
+        chekeados.add(false);
         valores.add("Conejo");
+        chekeados.add(false);
         valores.add("Zorro");
+        chekeados.add(true);
         valores.add("Mapache");
-    }
-    
-    
-    
-    public void callD(View v){
-        
+        chekeados.add(false);
+
+        //Listener para o boton de showDialog
+        btnShow.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+                showDialog(numeroDialogo);
+            }
+        });
     }
 
-    public void callDialog(View v){
+    public void engadirAnimal(View v) {
+        valores.add(engadeMamiferos.getText().toString());
+        chekeados.add(false);
+        engadeMamiferos.setText("");
+
+    }
+
+
+
+
+
+    public void callDialog(View v) {
         callFragment();
     }
 
-    
-    public void callFragment(){
-        Bundle feixe=new Bundle();
-        feixe.putStringArrayList("valor",valores);
+
+    public void callFragment() {
+        Bundle feixe = new Bundle();
+        feixe.putStringArrayList("valor", valores);
+        boolean[] buleanos = new boolean[valores.size()];
+        int i = 0;
+        for (Boolean checked : chekeados) {
+            buleanos[i] = checked;
+            i++;
+        }
+        feixe.putBooleanArray("check", buleanos);
         dialogoF.setArguments(feixe);
         dialogoF.show(getFragmentManager(), "");
+
+    }
+
+    protected Dialog onCreateDialog(int id){
+
+            venta = new AlertDialog.Builder(this);
+            venta.setIcon(android.R.drawable.ic_dialog_info);
+            venta.setTitle("Selecciona mamíferos");
+
+            matriz = new String[valores.size()];
+            chekeadositems = new boolean[valores.size()];
+            int x = 0;
+            for (String valor : valores) {
+
+                matriz[x] = valor;
+                x++;
+            }
+
+            int i = 0;
+            for (boolean item : chekeados) {
+
+                chekeadositems[i] =item;
+                i++;
+            }
+
+            venta.setMultiChoiceItems(matriz, chekeadositems, new DialogInterface.OnMultiChoiceClickListener() {
+                public void onClick(DialogInterface dialog, int opcion, boolean isChecked) {
+                    // Evento que ocorre cando o usuario selecciona unha opción
+                    if (isChecked) {
+                        //Toast.makeText(getActivity(), "Seleccionaches " +matriz[opcion], Toast.LENGTH_SHORT).show();
+                        chekeadositems[opcion] = true;
+
+                    } else {
+                        //Toast.makeText(getActivity(), "Deseleccionaches " +matriz[opcion], Toast.LENGTH_SHORT).show();
+                        chekeadositems[opcion] = false;
+                    }
+                }
+            });
+            venta.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int boton) {
+                    Toast.makeText(getBaseContext(), "Premeches 'Aceptar'", Toast.LENGTH_SHORT).show();
+                }
+            });
+            venta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int boton) {
+                    Toast.makeText(getBaseContext(), "Premeches 'Cancelar'", Toast.LENGTH_SHORT).show();
+                }
+            });
+            return venta.create();
+
     }
 }
+
+
+

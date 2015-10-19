@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class dialogo extends DialogFragment {
     boolean[]chekeados;
     String[]matriz;
 
+
     @Override
     public Dialog onCreateDialog(Bundle estado) {
 
@@ -24,16 +26,8 @@ public class dialogo extends DialogFragment {
         venta.setIcon(android.R.drawable.ic_dialog_info);
         venta.setTitle("Selecciona mamíferos");
         valores = getArguments().getStringArrayList("valor");
-        chekeados= new boolean[valores.size()];
+        chekeados= getArguments().getBooleanArray("check");
         matriz= new String[valores.size()];
-        chekeados[0] = false;
-        chekeados[1] = true;
-        chekeados[2] = false;
-        chekeados[3] = true;
-
-        for (int i = 4; i < valores.size(); i++) {
-            chekeados[i] = false;
-        }
 
         int x=0;
         for (String valor:valores){
@@ -47,11 +41,12 @@ public class dialogo extends DialogFragment {
             public void onClick(DialogInterface dialog, int opcion, boolean isChecked) {
                 // Evento que ocorre cando o usuario selecciona unha opción
                 if (isChecked) {
-                    Toast.makeText(getActivity(), "Seleccionaches " +matriz[opcion], Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Seleccionaches " +matriz[opcion], Toast.LENGTH_SHORT).show();
                     chekeados[opcion] = true;
+
                 }
                 else {
-                    Toast.makeText(getActivity(), "Deseleccionaches " +matriz[opcion], Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Deseleccionaches " +matriz[opcion], Toast.LENGTH_SHORT).show();
                     chekeados[opcion]=false;
                 }
             }

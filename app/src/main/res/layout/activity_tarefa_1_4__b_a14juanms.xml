@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:onClick="callD"
         android:text="showDialog" />
 
 
@@ -29,12 +28,14 @@
 
 
     <TextView
+        android:layout_marginTop="30dp"
         android:id="@+id/itemSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Aquí aparecen elementos seleccionados"/>
 
     <EditText
+        android:layout_marginTop="30dp"
         android:id="@+id/engadeMamifero"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
