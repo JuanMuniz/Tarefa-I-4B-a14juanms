@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class tarefa_1_4_B_a14juanms extends FragmentActivity {
 
-    static final int numeroDialogo=1;
+    static final int numeroDialogo = 1;
     ArrayList<String> valores = new ArrayList<>();
     ArrayList<Boolean> chekeados = new ArrayList<>();
     dialogo dialogoF = new dialogo();
@@ -43,6 +43,7 @@ public class tarefa_1_4_B_a14juanms extends FragmentActivity {
     AlertDialog.Builder venta;
     boolean chekeadositems[];
     String matriz[];
+    String seleccionados;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,20 +70,24 @@ public class tarefa_1_4_B_a14juanms extends FragmentActivity {
         btnShow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
 
+                onCreateDialog(numeroDialogo);
                 showDialog(numeroDialogo);
+
             }
         });
     }
 
     public void engadirAnimal(View v) {
-        valores.add(engadeMamiferos.getText().toString());
-        chekeados.add(false);
-        engadeMamiferos.setText("");
+        if (!engadeMamiferos.getText().toString().equals("")) {
+            valores.add(engadeMamiferos.getText().toString());
+            chekeados.add(false);
+            engadeMamiferos.setText("");
+            
 
+        } else {
+            Toast.makeText(getApplicationContext(), " Escribe mamífero ", Toast.LENGTH_SHORT).show();
+        }
     }
-
-
-
 
 
     public void callDialog(View v) {
@@ -105,54 +110,62 @@ public class tarefa_1_4_B_a14juanms extends FragmentActivity {
 
     }
 
-    protected Dialog onCreateDialog(int id){
+    protected Dialog onCreateDialog(int id) {
 
-            venta = new AlertDialog.Builder(this);
-            venta.setIcon(android.R.drawable.ic_dialog_info);
-            venta.setTitle("Selecciona mamíferos");
+        verMamiferos.setText("");
+        seleccionados = "";
+        venta = new AlertDialog.Builder(this);
+        venta.setIcon(android.R.drawable.ic_dialog_info);
+        venta.setTitle("Selecciona mamíferos");
 
-            matriz = new String[valores.size()];
-            chekeadositems = new boolean[valores.size()];
-            int x = 0;
-            for (String valor : valores) {
+        matriz = new String[valores.size()];
+        chekeadositems = new boolean[valores.size()];
+        int x = 0;
+        for (String valor : valores) {
 
-                matriz[x] = valor;
-                x++;
+            matriz[x] = valor;
+            x++;
+        }
+
+        int i = 0;
+        for (boolean item : chekeados) {
+
+            chekeadositems[i] = item;
+            i++;
+        }
+
+        venta.setMultiChoiceItems(matriz, chekeadositems, new DialogInterface.OnMultiChoiceClickListener() {
+            public void onClick(DialogInterface dialog, int opcion, boolean isChecked) {
+                // Evento que ocorre cando o usuario selecciona unha opción
+                if (isChecked) {
+
+                    chekeadositems[opcion] = true;
+
+                } else {
+
+                    chekeadositems[opcion] = false;
+                }
             }
-
-            int i = 0;
-            for (boolean item : chekeados) {
-
-                chekeadositems[i] =item;
-                i++;
+        });
+        venta.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int boton) {
+                Toast.makeText(getBaseContext(), "Premeches 'Aceptar'", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < chekeadositems.length; i++) {
+                    if (chekeadositems[i]) seleccionados = seleccionados + matriz[i] + " ";
+                }
+                verMamiferos.setText(seleccionados);
             }
-
-            venta.setMultiChoiceItems(matriz, chekeadositems, new DialogInterface.OnMultiChoiceClickListener() {
-                public void onClick(DialogInterface dialog, int opcion, boolean isChecked) {
-                    // Evento que ocorre cando o usuario selecciona unha opción
-                    if (isChecked) {
-                        //Toast.makeText(getActivity(), "Seleccionaches " +matriz[opcion], Toast.LENGTH_SHORT).show();
-                        chekeadositems[opcion] = true;
-
-                    } else {
-                        //Toast.makeText(getActivity(), "Deseleccionaches " +matriz[opcion], Toast.LENGTH_SHORT).show();
-                        chekeadositems[opcion] = false;
-                    }
-                }
-            });
-            venta.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int boton) {
-                    Toast.makeText(getBaseContext(), "Premeches 'Aceptar'", Toast.LENGTH_SHORT).show();
-                }
-            });
-            venta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int boton) {
-                    Toast.makeText(getBaseContext(), "Premeches 'Cancelar'", Toast.LENGTH_SHORT).show();
-                }
-            });
-            return venta.create();
+        });
+        venta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int boton) {
+                Toast.makeText(getBaseContext(), "Premeches 'Cancelar'", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return venta.create();
 
     }
+
+
 }
 
 
